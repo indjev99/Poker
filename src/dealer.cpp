@@ -6,20 +6,19 @@
 
 #include <iostream>
 
-Dealer::Dealer(const Table& table, std::vector<Agent*>& agents, std::vector<Agent*>& spectators)
+Dealer::Dealer(Table* table, std::vector<Agent*>& agents, std::vector<Agent*>& spectators)
     : rng(time(nullptr))
     , table(table)
-    , allHoleCards(table.numPlayers)
+    , allHoleCards(table->numPlayers)
     , agents(agents)
 {
-    assert((int) agents.size() == table.numPlayers);
+    assert((int) agents.size() == table->numPlayers);
 
     int idx = 0;
     for (Agent* agent : agents)
     {
-        agent->setTable(&(this->table));
-        agent->setSelfIdx(idx);
-        agent->setSelfHoleCards(&allHoleCards[idx]);
+        agent->setTable(this->table);
+        agent->setSelfIdxAndHoleCards(idx, &allHoleCards[idx]);
         agent->setAllHoleCards(nullptr);
         listeners.push_back(agent);
         ++idx;
@@ -27,9 +26,8 @@ Dealer::Dealer(const Table& table, std::vector<Agent*>& agents, std::vector<Agen
 
     for (Agent* spectator : spectators)
     {
-        spectator->setTable(&(this->table));
-        spectator->setSelfIdx(-1);
-        spectator->setSelfHoleCards(nullptr);
+        spectator->setTable(this->table);
+        spectator->setSelfIdxAndHoleCards(-1, nullptr);
         spectator->setAllHoleCards(&allHoleCards);
         listeners.push_back(spectator);
     }
@@ -48,19 +46,19 @@ void Dealer::playHand()
         }
     }
 
-    table.startHand();
+    table->startHand();
 
     for (Agent* listener : listeners)
     {
         listener->handStarted();
     }
 
-    while (table.state != END_HAND_SHOWDOWN)
+    while (table->state != END_HAND_SHOWDOWN)
     {
-        table.startRound();
-        while (table.state == DEAL_CARD)
+        table->startRound();
+        while (table->state == DEAL_CARD)
         {
-            table.dealCard(deck.drawCard());
+            table->dealCard(deck.drawCard());
         }
     
         for (Agent* listener : listeners)
@@ -68,9 +66,9 @@ void Dealer::playHand()
             listener->roundStarted();
         }
 
-        while (table.state == ACT)
+        while (table->state == ACT)
         {
-            int player = table.currPlayer;
+            int player = table->currPlayer;
 
             for (Agent* listener : listeners)
             {
@@ -78,7 +76,7 @@ void Dealer::playHand()
             }
 
             int bet = agents[player]->getAction();
-            table.act(bet);
+            table->act(bet);
 
             for (Agent* listener : listeners)
             {
@@ -86,10 +84,10 @@ void Dealer::playHand()
             }
         }
 
-        if (table.state == END_HAND_FOLDS)
+        if (table->state == END_HAND_FOLDS)
         {
-            int winner = table.currPlayer;
-            table.endHandFolds();
+            int winner = table->currPlayer;
+            table->endHandFolds();
 
             for (Agent* listener : listeners)
             {
@@ -99,7 +97,7 @@ void Dealer::playHand()
             return;
         }
 
-        table.endRound();
+        table->endRound();
 
         for (Agent* listener : listeners)
         {
@@ -108,13 +106,13 @@ void Dealer::playHand()
     }
 
     std::vector<int> players;
-    int currPlayer = table.lastAggressor;
+    int currPlayer = table->lastAggressor;
     do
     {
         players.push_back(currPlayer);
-        currPlayer = table.nextActivePlayer(currPlayer);
+        currPlayer = table->nextActivePlayer(currPlayer);
     }
-    while (currPlayer != table.lastAggressor);
+    while (currPlayer != table->lastAggressor);
 
     for (Agent* listener : listeners)
     {
@@ -125,7 +123,7 @@ void Dealer::playHand()
     std::vector<int> winners;
     for (int player : players)
     {
-        Hand hand = findBestHand({table.sharedCards, allHoleCards[player].cards});
+        Hand hand = findBestHand({table->sharedCards, allHoleCards[player].cards});
 
         if (hand > maxHand)
         {
@@ -144,7 +142,7 @@ void Dealer::playHand()
         }
     }
 
-    table.endHandShowdown(winners);
+    table->endHandShowdown(winners);
 
     for (Agent* listener : listeners)
     {

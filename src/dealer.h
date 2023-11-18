@@ -11,7 +11,7 @@ struct Dealer
 {
     RNG rng;
 
-    Table table;
+    Table* table;
 
     Deck deck;
     std::vector<HoleCards> allHoleCards;
@@ -19,7 +19,7 @@ struct Dealer
     std::vector<Agent*> agents;
     std::vector<Agent*> listeners;
 
-    Dealer(const Table& table, std::vector<Agent*>& agents, std::vector<Agent*>& spectators);
+    Dealer(Table* table, std::vector<Agent*>& agents, std::vector<Agent*>& spectators);
 
     void playHand();
 };

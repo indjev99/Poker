@@ -21,13 +21,9 @@ struct Agent
         this->table = table;
     }
 
-    void setSelfIdx(int selfIdx)
+    void setSelfIdxAndHoleCards(int selfIdx, const HoleCards* selfHoleCards)
     {
         this->selfIdx = selfIdx;
-    }
-
-    void setSelfHoleCards(const HoleCards* selfHoleCards)
-    {
         this->selfHoleCards = selfHoleCards;
     }
 
