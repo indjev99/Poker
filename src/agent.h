@@ -49,7 +49,7 @@ struct Agent
     virtual void playerToAct(int player) {}
     virtual void playerActed(int player, int bet) {}
 
-    virtual int getAction() { return table->currBet == 0 ? table->minRaise : table->currBet; }
+    virtual int getAction() { return FOLD_BET; }
 
     virtual ~Agent() = default;
 };
