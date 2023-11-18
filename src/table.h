@@ -28,7 +28,7 @@ struct Table
 
     // whole game
     int currDealer;
-    std::vector<int> playerPnls;
+    std::vector<long long> playerPnls;
 
     // per hand
     int pot;

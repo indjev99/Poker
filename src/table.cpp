@@ -179,9 +179,13 @@ void Table::act(int playerBet)
         }
     }
 
+    int prevPlayer = currPlayer;
     currPlayer = nextActivePlayer(currPlayer);
 
+    int currPlayerDiff = (currPlayer - prevPlayer + numPlayers) % numPlayers;
+    int lastRoundAggressorDiff = (lastRoundAggressor - prevPlayer + numPlayers) % numPlayers;
+
     if (numActivePlayers == 1) state = END_HAND_FOLDS;
-    else if (currPlayer == lastRoundAggressor) state = END_ROUND;
+    else if (lastRoundAggressorDiff > 0 && currPlayerDiff >= lastRoundAggressorDiff) state = END_ROUND;
     else state = ACT;
 }
