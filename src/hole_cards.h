@@ -9,17 +9,17 @@ struct HoleCards
 {
     std::vector<Card> cards;
 
-    constexpr HoleCards()
+    HoleCards()
     {
         cards.reserve(NUM_HOLE_CARDS);
     }
 
-    constexpr void startHand()
+    void clear()
     {
         cards.clear();
     }
 
-    constexpr void dealCard(Card card)
+    void dealCard(Card card)
     {
         cards.push_back(card);
     }

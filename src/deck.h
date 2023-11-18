@@ -10,14 +10,18 @@ struct Deck
     int pos;
     Card cards[NUM_CARDS];
 
-    Deck(RNG& rng)
-        : pos(0)
+    Deck()
     {
+        pos = 0;
         for (int id = 0; id < NUM_CARDS; ++id)
         {
             cards[id] = Card(id);
         }
+    }
 
+    void shuffle(RNG& rng)
+    {
+        pos = 0;
         std::shuffle(cards, cards + NUM_CARDS, rng.generator);
     }
 
