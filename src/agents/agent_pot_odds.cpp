@@ -2,8 +2,9 @@
 #include "deck.h"
 #include "find_hand.h"
 
-AgentPotOdds::AgentPotOdds()
-    : rng(42)
+AgentPotOdds::AgentPotOdds(int version)
+    : version(version)
+    , rng(42)
 {}
 
 int AgentPotOdds::getAction()

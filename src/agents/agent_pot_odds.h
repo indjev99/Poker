@@ -5,9 +5,11 @@
 
 struct AgentPotOdds : Agent
 {
-    AgentPotOdds();
+    AgentPotOdds(int version = 0);
 
     int getAction() override;
+
+    int version;
 
     RNG rng;
 

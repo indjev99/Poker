@@ -11,7 +11,7 @@
 int main()
 {
     std::vector<Agent*> agents = {
-        new AgentPotOdds(),
+        new AgentPotOdds(1),
         new AgentBetCall(),
         new AgentPotOdds(),
         new AgentBetCall(),
