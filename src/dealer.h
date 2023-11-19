@@ -22,4 +22,9 @@ struct Dealer
     Dealer(Table* table, std::vector<Agent*>& agents, std::vector<Agent*>& spectators);
 
     void playHand();
+
+private:
+
+    std::vector<int> showdownPlayers;
+    std::vector<int> showdownWinners;
 };

@@ -38,9 +38,9 @@ int main()
 
         ++numHands;
 
-        if (numHands % 1000 == 0)
+        if (numHands % 10000 == 0)
         {
-            std::cout << numHands << ":";
+            std::cout << std::setw(4) << numHands / 1000 << "k" << ":";
             for (int pnl : table.playerPnls)
             {
                 std::cout << " " << std::fixed << std::setprecision(2) << std::setw(7) << (double) pnl / numHands;

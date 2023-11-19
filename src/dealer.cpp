@@ -105,35 +105,35 @@ void Dealer::playHand()
         }
     }
 
-    std::vector<int> players;
+    showdownPlayers.clear();
     int currPlayer = table->lastAggressor;
     do
     {
-        players.push_back(currPlayer);
+        showdownPlayers.push_back(currPlayer);
         currPlayer = table->nextActivePlayer(currPlayer);
     }
     while (currPlayer != table->lastAggressor);
 
     for (Agent* listener : listeners)
     {
-        listener->handToEndShowdown(players);
+        listener->handToEndShowdown(showdownPlayers);
     }
 
     Hand maxHand;
-    std::vector<int> winners;
-    for (int player : players)
+    showdownWinners.clear();
+    for (int player : showdownPlayers)
     {
         Hand hand = findBestHand({table->sharedCards, allHoleCards[player].cards});
 
         if (hand > maxHand)
         {
             maxHand = hand;
-            winners.clear();
+            showdownWinners.clear();
         }
 
         if (hand == maxHand)
         {
-            winners.push_back(player);
+            showdownWinners.push_back(player);
 
             for (Agent* listener : listeners)
             {
@@ -142,10 +142,10 @@ void Dealer::playHand()
         }
     }
 
-    table->endHandShowdown(winners);
+    table->endHandShowdown(showdownWinners);
 
     for (Agent* listener : listeners)
     {
-        listener->handEndedShowdown(winners, maxHand);
+        listener->handEndedShowdown(showdownWinners, maxHand);
     }
 }
