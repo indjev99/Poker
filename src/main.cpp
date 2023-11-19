@@ -3,6 +3,7 @@
 #include "agent.h"
 #include "agents/agent_io.h"
 #include "agents/agent_bet_call.h"
+#include "agents/agent_pot_odds.h"
 
 #include <iostream>
 #include <iomanip>
@@ -16,11 +17,11 @@ int main()
     Table table(numPlayers, bigBlind, buyIn);
 
     std::vector<Agent*> agents = {
+        new AgentPotOdds(),
         new AgentBetCall(),
+        new AgentPotOdds(),
         new AgentBetCall(),
-        new AgentBetCall(),
-        new AgentBetCall(),
-        new AgentBetCall(),
+        new AgentPotOdds(),
         new AgentBetCall()
     };
 
@@ -38,12 +39,12 @@ int main()
 
         ++numHands;
 
-        if (numHands % 10000 == 0)
+        if (numHands % 1000 == 0)
         {
             std::cout << std::setw(4) << numHands / 1000 << "k" << ":";
             for (int pnl : table.playerPnls)
             {
-                std::cout << " " << std::fixed << std::setprecision(2) << std::setw(7) << (double) pnl / numHands;
+                std::cout << " " << std::fixed << std::setprecision(2) << std::setw(8) << (double) pnl / numHands;
             }
             std::cout << std::endl;
         }
