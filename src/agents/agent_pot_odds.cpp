@@ -2,8 +2,6 @@
 #include "deck.h"
 #include "find_hand.h"
 
-#include <iostream>
-
 AgentPotOdds::AgentPotOdds()
     : rng(42)
 {}
@@ -68,11 +66,17 @@ int AgentPotOdds::getAction()
     {
         int betCost = bet - table->playerBets[selfIdx];
 
-        if (betCost < table->currBet) return;
-        if (betCost > table->currBet && betCost < table->minRaise) return;
+        if (bet < table->currBet) return;
+        if (bet > table->currBet && bet < table->minRaise) return;
         if (betCost > table->playerStacks[selfIdx]) return;
 
-        int betPot = bet * table->numActivePlayers;
+        int betPot = table->pot;
+        for (int i = 0; i < table->numPlayers; ++i)
+        {
+            if (!table->playerActives[i]) continue;
+            betPot += bet - table->playerBets[i];
+        }
+
         double betEquity = betPot * potOdds;
         double EV = betEquity - betCost;
 
@@ -85,7 +89,10 @@ int AgentPotOdds::getAction()
 
     tryBet(table->currBet);
 
-    if (table->currBet < table->pot / 3 || (table->currRound == 0 && table->currBet == table->bigBlind))
+    if (table->currRound == 0 && table->currBet == table->bigBlind)
+        tryBet(table->bigBlind * 5 / 2);
+
+    if (table->currBet < table->pot / 3)
         tryBet(table->currBet + table->pot * 2 / 3);
 
     return bestBet;

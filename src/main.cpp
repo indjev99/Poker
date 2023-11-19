@@ -10,12 +10,6 @@
 
 int main()
 {
-    int numPlayers = 6;
-    int bigBlind = 10;
-    int buyIn = 2000;
-
-    Table table(numPlayers, bigBlind, buyIn);
-
     std::vector<Agent*> agents = {
         new AgentPotOdds(),
         new AgentBetCall(),
@@ -28,6 +22,12 @@ int main()
     std::vector<Agent*> spectators = {
         // new AgentIO()
     };
+
+    int numPlayers = agents.size();
+    int bigBlind = 10;
+    int buyIn = 2000;
+
+    Table table(numPlayers, bigBlind, buyIn);
 
     Dealer dealer(&table, agents, spectators);
 
