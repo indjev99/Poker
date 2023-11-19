@@ -5,4 +5,4 @@
 
 #include <vector>
 
-Hand findBestHand(const std::vector<std::vector<Card>>& cardsLists);
+Hand findBestHand(const std::vector<const std::vector<Card>*>& cardsLists);

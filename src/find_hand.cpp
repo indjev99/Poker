@@ -1,15 +1,15 @@
 #include "find_hand.h"
 #include "config.h"
 
-Hand findBestHand(const std::vector<std::vector<Card>>& cardsLists)
+Hand findBestHand(const std::vector<const std::vector<Card>*>& cardsLists)
 {
     int countByRank[NUM_RANKS] = {};
     int countBySuit[NUM_SUITS] = {};
     int countBySuitRank[NUM_SUITS][NUM_RANKS] = {};
 
-    for (const std::vector<Card>& cards : cardsLists)
+    for (const std::vector<Card>* cards : cardsLists)
     {
-        for (Card card : cards)
+        for (Card card : *cards)
         {
             ++countByRank[card.rank()];
             ++countBySuit[card.suit()];

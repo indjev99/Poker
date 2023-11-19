@@ -123,7 +123,7 @@ void Dealer::playHand()
     showdownWinners.clear();
     for (int player : showdownPlayers)
     {
-        Hand hand = findBestHand({table->sharedCards, allHoleCards[player].cards});
+        Hand hand = findBestHand({&table->sharedCards, &allHoleCards[player].cards});
 
         if (hand > maxHand)
         {
