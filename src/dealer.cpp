@@ -4,8 +4,6 @@
 #include <ctime>
 #include <cassert>
 
-#include <iostream>
-
 Dealer::Dealer(Table* table, std::vector<Agent*>& agents, std::vector<Agent*>& spectators)
     : rng(time(nullptr))
     , table(table)
@@ -106,13 +104,15 @@ void Dealer::playHand()
     }
 
     showdownPlayers.clear();
-    int currPlayer = table->lastAggressor;
+    int startPlayer = table->lastAggressor;
+    if (!table->playerActives[startPlayer]) startPlayer = table->nextActivePlayer(startPlayer);
+    int currPlayer = startPlayer;
     do
     {
         showdownPlayers.push_back(currPlayer);
         currPlayer = table->nextActivePlayer(currPlayer);
     }
-    while (currPlayer != table->lastAggressor);
+    while (currPlayer != startPlayer);
 
     for (Agent* listener : listeners)
     {
