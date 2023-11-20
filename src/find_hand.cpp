@@ -68,7 +68,7 @@ Hand findBestHand(const std::vector<const std::vector<Card>*>& cardsLists)
     }
 
     if (max4 != -1) return {FOUR_OF_A_KIND, max4 * NUM_RANKS + std::max(std::max(max3, max2), max1)};
-    if (max3 != -1 && max2 != -1) return {FOUR_OF_A_KIND, max3 * NUM_RANKS + max2};
+    if (max3 != -1 && max2 != -1) return {FULL_HOUSE, max3 * NUM_RANKS + max2};
 
     int maxFlush = -1;
     for (int suit = 0; suit < NUM_SUITS; ++suit)
